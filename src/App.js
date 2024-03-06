@@ -5,7 +5,8 @@ import React, { useState, useEffect } from "react";
 import CustomerList from "./components/CustomerList";
 import CustomerAddUpdateForm from "./components/CustomerAddUpdateForm";
 // import customers from "./memdb.js";
-import { getAll, post, put, deleteById } from "./memdb.js";
+// import { getAll, post, put, deleteById } from "./memdb.js";
+import { getAll, post, put, deleteById } from "./restdb.js";
 
 export function log(message) {
   console.log(message);
@@ -25,7 +26,7 @@ export function App(params) {
 
   const getCustomers = function () {
     log("in getCustomers()");
-    setCustomers(getAll());
+    getAll(setCustomers);
   };
 
   const handleListClick = function (item) {
