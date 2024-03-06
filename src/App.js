@@ -22,7 +22,7 @@ export function App(params) {
 
   useEffect(() => {
     getCustomers();
-  }, []);
+  }, [formObject]);
 
   const getCustomers = function () {
     log("in getCustomers()");
@@ -54,8 +54,11 @@ export function App(params) {
 
   let onDeleteClick = function () {
     log("in onDeleteClick()");
+    let postOpCallback = () => {
+      setFormObject(blankCustomer);
+    };
     if (formObject.id >= 0) {
-      deleteById(formObject.id);
+      deleteById(formObject.id, postOpCallback);
     }
     setFormObject(blankCustomer);
   };
