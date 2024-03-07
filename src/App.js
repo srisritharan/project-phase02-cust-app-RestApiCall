@@ -68,16 +68,31 @@ export function App(params) {
     }
     setFormObject(blankCustomer);
   };
-
+  function isValidEmail(email) {
+    // regular expression pattern for email validation.
+    const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return pattern.test(email);
+  }
   let onSaveClick = function () {
     log("in onSaveClick()");
-    if (mode === "Add") {
-      post(formObject, refresh);
+    // check if all the 3 inputs are not null
+    if (!formObject.name || !formObject.email || !formObject.password) {
+      alert("Please enter all the feilds");
+    } else {
+      if (isValidEmail(formObject.email)) {
+        // Email is valid, proceed
+        if (mode === "Add") {
+          post(formObject, refresh);
+        }
+        if (mode === "Update") {
+          put(formObject, refresh);
+        }
+        setFormObject(blankCustomer);
+      } else {
+        // Display an error message for invalid email.
+        alert(" Invalid email Please enter valid");
+      }
     }
-    if (mode === "Update") {
-      put(formObject, refresh);
-    }
-    setFormObject(blankCustomer);
   };
 
   return (
