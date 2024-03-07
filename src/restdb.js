@@ -69,29 +69,6 @@ export async function put(formObject, refresh) {
   }
 }
 
-export async function put(formObject, refresh) {
-    const updateUrl = `${baseURL}/${formObject.id}`;
-    try {
-      const myInit = {
-        method: "PUT",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formObject),
-      };
-      const response = await fetch(updateUrl, myInit);
-  
-      if (!response.ok) {
-        throw new Error(`Error posting data: ${response.status}`);
-      }
-      const responseData = await response.json();
-      refresh();
-    } catch (error) {
-      alert(error);
-    }
-  }
-
 export function deleteById(id, refresh) {
   const myInit = {
     method: "DELETE",
