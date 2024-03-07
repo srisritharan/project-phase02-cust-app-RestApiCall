@@ -1,26 +1,5 @@
 /** @format */
 
-const items = [
-  {
-    id: 0,
-    name: "Mike Johnsons",
-    email: "mikej@abc.com",
-    password: "mikej",
-  },
-  {
-    name: "Cindy Smiths",
-    email: "cinds@abc.com",
-    password: "cinds",
-    id: 1,
-  },
-  {
-    name: "Julio Martins",
-    email: "julim@abc.com",
-    password: "julim",
-    id: 2,
-  },
-];
-
 const baseURL = "http://localhost:4000/customers";
 
 export async function getAll(setCustomers) {
@@ -67,6 +46,28 @@ export async function post(formObject, refresh) {
   }
 }
 
+export async function put(formObject, refresh) {
+  const updateUrl = `${baseURL}/${formObject.id}`;
+  try {
+    const myInit = {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formObject),
+    };
+    const response = await fetch(updateUrl, myInit);
+
+    if (!response.ok) {
+      throw new Error(`Error posting data: ${response.status}`);
+    }
+    const responseData = await response.json();
+    refresh();
+  } catch (error) {
+    alert(error);
+  }
+}
 export function deleteById(id, refresh) {
   const myInit = {
     method: "DELETE",
@@ -86,43 +87,4 @@ export function deleteById(id, refresh) {
   };
   const deleteUrl = `${baseURL}/${id}`;
   fetchData(deleteUrl);
-}
-
-// export function deleteById(id) {
-//   let arrayIndex = getArrayIndexForId(id);
-//   if (arrayIndex >= 0 && arrayIndex < items.length) {
-//     items.splice(arrayIndex, 1);
-//   }
-// }
-
-// export function post(item) {
-//   let nextid = getNextId();
-//   item.id = nextid;
-//   items[items.length] = item;
-// }
-
-export function put(id, item) {
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].id === id) {
-      items[i] = item;
-      return;
-    }
-  }
-}
-
-function getArrayIndexForId(id) {
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].id === id) {
-      return i;
-    }
-  }
-  return -1;
-}
-
-function getNextId() {
-  let maxid = 0;
-  for (let item of items) {
-    maxid = item.id > maxid ? item.id : maxid;
-  }
-  return maxid + 1;
 }

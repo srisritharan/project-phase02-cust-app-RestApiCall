@@ -75,7 +75,7 @@ export function App(params) {
       post(formObject, refresh);
     }
     if (mode === "Update") {
-      put(formObject.id, formObject);
+      put(formObject, refresh);
     }
     setFormObject(blankCustomer);
   };
