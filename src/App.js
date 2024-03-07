@@ -75,24 +75,27 @@ export function App(params) {
   }
   let onSaveClick = function () {
     log("in onSaveClick()");
+
     // check if all the 3 inputs are not null
     if (!formObject.name || !formObject.email || !formObject.password) {
-      alert("Please enter all the feilds");
-    } else {
-      if (isValidEmail(formObject.email)) {
-        // Email is valid, proceed
-        if (mode === "Add") {
-          post(formObject, refresh);
-        }
-        if (mode === "Update") {
-          put(formObject, refresh);
-        }
-        setFormObject(blankCustomer);
-      } else {
-        // Display an error message for invalid email.
-        alert(" Invalid email Please enter valid");
-      }
+      alert("Please enter all the fields");
+      return;
     }
+
+    if (!isValidEmail(formObject.email)) {
+      // Display an error message for invalid email.
+      alert("Invalid email. Please enter valid");
+      return;
+    }
+
+    // Email is valid, proceed
+    if (mode === "Add") {
+      post(formObject, refresh);
+    }
+    if (mode === "Update") {
+      put(formObject, refresh);
+    }
+    setFormObject(blankCustomer);
   };
 
   return (
