@@ -15,6 +15,7 @@ export function log(message) {
 export function App(params) {
   let blankCustomer = { id: -1, name: "", email: "", password: "" };
   // let formObject = customers[0];
+  const [refreshFlag, setRefreshFlag] = useState(0);
   const [customers, setCustomers] = useState([]);
   const [formObject, setFormObject] = useState(blankCustomer);
 
@@ -22,7 +23,14 @@ export function App(params) {
 
   useEffect(() => {
     getCustomers();
-  }, [formObject]);
+  }, [refreshFlag]);
+
+  const refresh = function (noChanges = false) {
+    if (!noChanges) {
+      setRefreshFlag(refreshFlag + 1);
+    }
+    setFormObject(blankCustomer);
+  };
 
   const getCustomers = function () {
     log("in getCustomers()");
@@ -54,11 +62,9 @@ export function App(params) {
 
   let onDeleteClick = function () {
     log("in onDeleteClick()");
-    let postOpCallback = () => {
-      setFormObject(blankCustomer);
-    };
+
     if (formObject.id >= 0) {
-      deleteById(formObject.id, postOpCallback);
+      deleteById(formObject.id, refresh);
     }
     setFormObject(blankCustomer);
   };
@@ -66,7 +72,7 @@ export function App(params) {
   let onSaveClick = function () {
     log("in onSaveClick()");
     if (mode === "Add") {
-      post(formObject);
+      post(formObject, refresh);
     }
     if (mode === "Update") {
       put(formObject.id, formObject);

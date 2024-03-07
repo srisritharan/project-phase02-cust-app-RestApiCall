@@ -44,7 +44,30 @@ export async function getAll(setCustomers) {
   fetchData(baseURL);
 }
 
-export function deleteById(id, postOpCallback) {
+export async function post(formObject, refresh) {
+  delete formObject.id;
+  try {
+    const myInit = {
+      method: "Post",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formObject),
+    };
+    const response = await fetch(baseURL, myInit);
+
+    if (!response.ok) {
+      throw new Error(`Error posting data: ${response.status}`);
+    }
+    const responseData = await response.json();
+    refresh();
+  } catch (error) {
+    alert(error);
+  }
+}
+
+export function deleteById(id, refresh) {
   const myInit = {
     method: "DELETE",
     mode: "cors",
@@ -56,7 +79,7 @@ export function deleteById(id, postOpCallback) {
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.status}`);
       }
-      postOpCallback();
+      refresh();
     } catch (error) {
       alert(error);
     }
@@ -64,32 +87,19 @@ export function deleteById(id, postOpCallback) {
   const deleteUrl = `${baseURL}/${id}`;
   fetchData(deleteUrl);
 }
-// export function getAll() {
-//   return items;
+
+// export function deleteById(id) {
+//   let arrayIndex = getArrayIndexForId(id);
+//   if (arrayIndex >= 0 && arrayIndex < items.length) {
+//     items.splice(arrayIndex, 1);
+//   }
 // }
 
-export function get(id) {
-  let result = null;
-  for (let item of items) {
-    if (item.id === id) {
-      result = item;
-    }
-  }
-  return result;
-}
-
-export function deleteById(id) {
-  let arrayIndex = getArrayIndexForId(id);
-  if (arrayIndex >= 0 && arrayIndex < items.length) {
-    items.splice(arrayIndex, 1);
-  }
-}
-
-export function post(item) {
-  let nextid = getNextId();
-  item.id = nextid;
-  items[items.length] = item;
-}
+// export function post(item) {
+//   let nextid = getNextId();
+//   item.id = nextid;
+//   items[items.length] = item;
+// }
 
 export function put(id, item) {
   for (let i = 0; i < items.length; i++) {
