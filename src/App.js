@@ -90,9 +90,30 @@ export function App(params) {
 
     // Email is valid, proceed
     if (mode === "Add") {
+      //validate if customer already exist!
+      const customerExist = customers.find(
+        (customers) =>
+          customers.name === formObject.name &&
+          customers.email === formObject.email
+      );
+      if (customerExist) {
+        alert(" Customer data already exist");
+        return;
+      }
       post(formObject, refresh);
     }
     if (mode === "Update") {
+      //validate if customer data is changed!
+      const customerChange = customers.find(
+        (customers) =>
+          customers.name === formObject.name &&
+          customers.email === formObject.email &&
+          customers.password === formObject.password
+      );
+      if (customerChange) {
+        alert(" Customer data is not changed, please verify");
+        return;
+      }
       put(formObject, refresh);
     }
     setFormObject(blankCustomer);
